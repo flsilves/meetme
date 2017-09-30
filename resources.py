@@ -1,4 +1,4 @@
-from model import Todo
+from model import User
 from db import session
 
 from flask_restful import reqparse
@@ -7,51 +7,52 @@ from flask_restful import Resource
 from flask_restful import fields
 from flask_restful import marshal_with
 
-todo_fields = {
+user_fields = {
     'id': fields.Integer,
-    'task': fields.String,
-    'uri': fields.Url('todo', absolute=True),
+    'name': fields.String,
+    'uri': fields.Url('user', absolute=True),
 }
 
 parser = reqparse.RequestParser()
-parser.add_argument('task', type=str)
+parser.add_argument('name', type=str)
 
-class TodoResource(Resource):
-    @marshal_with(todo_fields)
+
+class UserResource(Resource):
+    @marshal_with(user_fields)
     def get(self, id):
-        todo = session.query(Todo).filter(Todo.id == id).first()
-        if not todo:
-            abort(404, message="Todo {} doesn't exist".format(id))
-        return todo
+        queried_user = session.query(User).filter(User.id == id).first()
+        if not queried_user:
+            abort(404, message="User {} doesn't exist".format(id))
+        return queried_user
 
     def delete(self, id):
-        todo = session.query(Todo).filter(Todo.id == id).first()
-        if not todo:
-            abort(404, message="Todo {} doesn't exist".format(id))
-        session.delete(todo)
+        queried_user = session.query(User).filter(User.id == id).first()
+        if not queried_user:
+            abort(404, message="User {} doesn't exist".format(id))
+        session.delete(queried_user)
         session.commit()
         return {}, 204
 
-    @marshal_with(todo_fields)
+    @marshal_with(user_fields)
     def put(self, id):
         parsed_args = parser.parse_args()
-        todo = session.query(Todo).filter(Todo.id == id).first()
-        todo.task = parsed_args['task']
-        session.add(todo)
+        new_user = session.query(User).filter(User.id == id).first()
+        new_user.name = parsed_args['name']
+        session.add(new_user)
         session.commit()
-        return todo, 201
+        return new_user, 201
 
 
-class TodoListResource(Resource):
-    @marshal_with(todo_fields)
+class UserListResource(Resource):
+    @marshal_with(user_fields)
     def get(self):
-        todos = session.query(Todo).all()
-        return todos
+        queried_user = session.query(User).all()
+        return queried_user
 
-    @marshal_with(todo_fields)
+    @marshal_with(user_fields)
     def post(self):
         parsed_args = parser.parse_args()
-        todo = Todo(task=parsed_args['task'])
-        session.add(todo)
+        new_user = User(name=parsed_args['name'])
+        session.add(new_user)
         session.commit()
-        return todo, 201
+        return new_user, 201
