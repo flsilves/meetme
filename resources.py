@@ -56,5 +56,10 @@ class UserListResource(Resource):
         parsed_args = parser.parse_args()
         new_user = User(name=parsed_args['name'], email=parsed_args['email'])
         session.add(new_user)
-        session.commit()
+        try:
+            session.commit()
+        except:
+            session.rollback()
+            print("Error: email: \"{}\" already registered".format(new_user.email))
+            abort(404, message="Error: email: \"{}\" already registered".format(new_user.email))
         return new_user, 201
