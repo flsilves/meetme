@@ -16,6 +16,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
+    email = Column(String(255), unique=True)
 
 if __name__ == "__main__":
     db = create_engine(DB_URI)

@@ -10,12 +10,13 @@ from flask_restful import marshal_with
 user_fields = {
     'id': fields.Integer,
     'name': fields.String,
+    'email': fields.String,
     'uri': fields.Url('user', absolute=True),
 }
 
 parser = reqparse.RequestParser()
 parser.add_argument('name', type=str)
-
+parser.add_argument('email', type=str)
 
 class UserResource(Resource):
     @marshal_with(user_fields)
@@ -38,6 +39,7 @@ class UserResource(Resource):
         parsed_args = parser.parse_args()
         new_user = session.query(User).filter(User.id == id).first()
         new_user.name = parsed_args['name']
+        new_user.email = parsed_args['email']
         session.add(new_user)
         session.commit()
         return new_user, 201
@@ -52,7 +54,7 @@ class UserListResource(Resource):
     @marshal_with(user_fields)
     def post(self):
         parsed_args = parser.parse_args()
-        new_user = User(name=parsed_args['name'])
+        new_user = User(name=parsed_args['name'], email=parsed_args['email'])
         session.add(new_user)
         session.commit()
         return new_user, 201
