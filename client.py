@@ -2,12 +2,12 @@ import requests
 import json
 
 # TODO add logging service
-# TODO explore polymorphism
-# TODO membership db
+# TODO rename Meeting to Record
+# TODO change recording attribute to storage_url
 # TODO unit test
-# TODO coverage
-# TODO integration with travis
-# TODO aplly OOP
+# TODO apply OOP
+# TODO Pretty methods
+# Membership endpoint and API
 json_header = {'Content-type': 'application/json'}
 
 host_address = "http://127.0.0.1:5000"

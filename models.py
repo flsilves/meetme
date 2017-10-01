@@ -24,6 +24,7 @@ class Meeting(Base):
     owner_id = Column(Integer, ForeignKey('users.id'))
     recording = Column(String(255), unique=True)
     privacy = Column(String(255))
+    password = Column(String(255))
 
 
 class User(Base):
