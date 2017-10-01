@@ -4,6 +4,10 @@ import json
 #TODO add logging service
 #TODO explore polymorphism
 #TODO membership db
+#TODO unit test
+#TODO coverage
+#TODO integration with travis
+#TODO aplly OOP
 json_header = {'Content-type': 'application/json'}
 
 host_address = "http://127.0.0.1:5000"
@@ -55,11 +59,11 @@ def create_user(user_name, user_email):
 
 if __name__ == '__main__':
     create_user("Flavio", "flaviosilvestre89@gmail.com")
-    create_user("Inês Silva", "ines_silva@gmail.com")
+    create_user("Ines Silva", "ines_silva@gmail.com")
     print(get_all_users())
-    delete_user("ines_silva@gmail.com")
-    delete_user("flaviosilvestre89@gmail.com")
-    print(get_all_users())
+    #delete_user("ines_silva@gmail.com")
+    #delete_user("flaviosilvestre89@gmail.com")
+    #print(get_all_users())
 
 
 
