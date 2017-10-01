@@ -1,35 +1,10 @@
-from model import User, Meeting
+from parsers import *
+from models import User, Meeting, Permission
 from db import session
 
-from flask_restful import reqparse
 from flask_restful import abort
 from flask_restful import Resource
-from flask_restful import fields
 from flask_restful import marshal_with
-
-user_fields = {
-    'id': fields.Integer,
-    'name': fields.String,
-    'email': fields.String,
-    'uri': fields.Url('user', absolute=True),
-}
-
-user_parser = reqparse.RequestParser()
-user_parser.add_argument('name', type=str)
-user_parser.add_argument('email', type=str)
-
-meeting_fields = {
-    'id': fields.Integer,
-    'owner': fields.String,
-    'recording': fields.String,
-    'privacy': fields.String,
-    'uri': fields.Url('meeting', absolute=True)
-}
-
-meeting_parser = reqparse.RequestParser()
-meeting_parser.add_argument('owner', type=str)
-meeting_parser.add_argument('recording', type=str)
-meeting_parser.add_argument('privacy', type=str)
 
 
 class UserResource(Resource):
@@ -48,15 +23,6 @@ class UserResource(Resource):
         session.commit()
         return {}, 204
 
-    @marshal_with(user_fields)
-    def put(self, id):
-        parsed_args = user_parser.parse_args()
-        new_user = session.query(User).filter(User.id == id).first()
-        new_user.name = parsed_args['name']
-        new_user.email = parsed_args['email']
-        session.add(new_user)
-        session.commit()
-        return new_user, 201
 
 class UserListResource(Resource):
     @marshal_with(user_fields)
@@ -77,6 +43,7 @@ class UserListResource(Resource):
             abort(404, message="Error: email: \"{}\" already registered".format(new_user.email))
         return new_user, 201
 
+
 class MeetingResource(Resource):
     @marshal_with(meeting_fields)
     def get(self, id):
@@ -93,17 +60,6 @@ class MeetingResource(Resource):
         session.commit()
         return {}, 204
 
-    @marshal_with(meeting_fields)
-    def put(self, id):
-        parsed_args = meeting_parser.parse_args()
-        new_meeting = session.query(Meeting).filter(Meeting.id == id).first()
-        new_meeting.owner = parsed_args['owner']
-        new_meeting.recording = parsed_args['recording']
-        new_meeting.email = parsed_args['privacy']
-        session.add(new_meeting)
-        session.commit()
-        return new_meeting, 201
-
 
 class MeetingListResource(Resource):
     @marshal_with(meeting_fields)
@@ -114,10 +70,14 @@ class MeetingListResource(Resource):
     @marshal_with(meeting_fields)
     def post(self):
         parsed_args = meeting_parser.parse_args()
-        new_meeting = Meeting(owner=parsed_args['owner'], recording=parsed_args['recording'], privacy=parsed_args['privacy'])
+        new_meeting = Meeting(owner_id=parsed_args['owner_id'], recording=parsed_args['recording'],
+                              privacy=parsed_args['privacy'])
+
         session.add(new_meeting)
+        session.flush()
+        print(new_meeting.id)
+        new_permission = Permission(user_id=new_meeting.owner_id, meeting_id=new_meeting.id)
+        session.add(new_permission)
         session.commit()
+
         return new_meeting, 201
-
-
-

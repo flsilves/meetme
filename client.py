@@ -1,13 +1,13 @@
 import requests
 import json
 
-#TODO add logging service
-#TODO explore polymorphism
-#TODO membership db
-#TODO unit test
-#TODO coverage
-#TODO integration with travis
-#TODO aplly OOP
+# TODO add logging service
+# TODO explore polymorphism
+# TODO membership db
+# TODO unit test
+# TODO coverage
+# TODO integration with travis
+# TODO aplly OOP
 json_header = {'Content-type': 'application/json'}
 
 host_address = "http://127.0.0.1:5000"
@@ -19,6 +19,7 @@ def create_user(user_name, user_email):
     data = {"email": user_email, "name": user_name}
     return requests.post(meetings_url, data=json.dumps(data), headers=json_header)
 
+
 def dump(message):
     for field in message:
         print(field.decode('utf-8'))
@@ -27,8 +28,10 @@ def dump(message):
 def copyf(data, key, allowed):
     return list(filter(lambda f: f[key] in allowed, data))
 
+
 def get_all_users():
     return requests.get(users_url).json()
+
 
 def delete_user(user_email):
     user_list = get_all_users()
@@ -41,9 +44,10 @@ def delete_user(user_email):
     return response.status_code
 
 
-def create_meeting(owner, recording_url, privacy):
-    data = {"owner": owner, "recording": recording_url, "privacy": privacy}
+def create_meeting(owner_id, recording_url, privacy):
+    data = {"owner_id": owner_id, "recording": recording_url, "privacy": privacy}
     return requests.post(meetings_url, data=json.dumps(data), headers=json_header)
+
 
 def delete_meeting(meeting_id):
     return 0
@@ -51,6 +55,7 @@ def delete_meeting(meeting_id):
 
 def share_meeting(meeting_id, user_email):
     return 0
+
 
 def create_user(user_name, user_email):
     data = {"email": user_email, "name": user_name}
@@ -61,9 +66,7 @@ if __name__ == '__main__':
     create_user("Flavio", "flaviosilvestre89@gmail.com")
     create_user("Ines Silva", "ines_silva@gmail.com")
     print(get_all_users())
-    #delete_user("ines_silva@gmail.com")
-    #delete_user("flaviosilvestre89@gmail.com")
-    #print(get_all_users())
-
-
-
+    # delete_user("ines_silva@gmail.com")
+    # delete_user("flaviosilvestre89@gmail.com")
+    # print(get_all_users())
+    create_meeting("1", "https://s3.amazonaws.com/meeting/393217", "Private")
