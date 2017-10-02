@@ -70,7 +70,7 @@ class RecordingListResource(Resource):
     @marshal_with(recording_fields)
     def post(self):
         parsed_args = recording_parser.parse_args()
-        new_recording = recording(owner_id=parsed_args['owner_id'], recording=parsed_args['recording'], privacy=parsed_args['privacy'])
+        new_recording = recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'], privacy=parsed_args['privacy'])
         session.add(new_recording)
         session.flush()
         print(new_recording.id)

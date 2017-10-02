@@ -36,8 +36,8 @@ class ClientAPI:
         response = requests.delete(self.users_url + "/" + id_to_delete, headers=self.json_header)
         return response.status_code
 
-    def create_recording(self, owner_id, recording_url, privacy):
-        data = {"owner_id": owner_id, "recording": recording_url, "privacy": privacy}
+    def create_recording(self, owner_id, storage_url, privacy):
+        data = {"owner_id": owner_id, "storage_url": storage_url, "privacy": privacy}
         return requests.post(self.recordings_url, data=json.dumps(data), headers=self.json_header)
 
     def delete_recording(self, recording_id):
@@ -60,8 +60,7 @@ if __name__ == '__main__':
     print(client.get_all_users())
     client.create_user("Flavio", "flaviosilvestre89@gmail.com")
     client.create_user("Ines Silva", "ines_silva@gmail.com")
-
     #client.delete_user("ines_silva@gmail.com")
-    # print(client.get_all_users())
+    print(client.get_all_users())
     client.create_recording("1", "https://s3.amazonaws.com/recording/393217", "Private")
     client.delete_user(user_email="flaviosilvestre89@gmail.com")
