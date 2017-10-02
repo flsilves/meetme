@@ -44,7 +44,7 @@ class UserListResource(Resource):
         return new_user, 201
 
 
-class recordingResource(Resource):
+class RecordingResource(Resource):
     @marshal_with(recording_fields)
     def get(self, id):
         queried_recording = session.query(recording).filter(recording.id == id).first()
@@ -61,7 +61,7 @@ class recordingResource(Resource):
         return {}, 204
 
 
-class recordingListResource(Resource):
+class RecordingListResource(Resource):
     @marshal_with(recording_fields)
     def get(self):
         queried_recording = session.query(recording).all()
