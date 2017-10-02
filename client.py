@@ -8,7 +8,7 @@ import requests
 # TODO unit test
 # TODO apply OOP
 # TODO Pretty methods
-#TODO delete user, cascade -> delete all meetings that he owns + permissions
+
 
 class ClientAPI:
     def __init__(self, host_address):

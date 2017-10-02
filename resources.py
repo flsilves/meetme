@@ -70,9 +70,7 @@ class MeetingListResource(Resource):
     @marshal_with(meeting_fields)
     def post(self):
         parsed_args = meeting_parser.parse_args()
-        new_meeting = Meeting(owner_id=parsed_args['owner_id'], recording=parsed_args['recording'],
-                              privacy=parsed_args['privacy'])
-
+        new_meeting = Meeting(owner_id=parsed_args['owner_id'], recording=parsed_args['recording'], privacy=parsed_args['privacy'])
         session.add(new_meeting)
         session.flush()
         print(new_meeting.id)
