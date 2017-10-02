@@ -21,6 +21,9 @@ class ClientAPI:
         data = {"email": user_email, "name": user_name}
         return requests.post(self.meetings_url, data=json.dumps(data), headers=self.json_header)
 
+    def get_user_id(self, user_email):
+        return 1
+
     def get_all_users(self):
         return requests.get(self.users_url).json()
 
@@ -60,6 +63,6 @@ if __name__ == '__main__':
     client.create_user("Ines Silva", "ines_silva@gmail.com")
 
     #client.delete_user("ines_silva@gmail.com")
-    # print(client.get_all_users())
+    print(client.get_all_users())
     client.create_meeting("1", "https://s3.amazonaws.com/meeting/393217", "Private")
     client.delete_user(user_email="flaviosilvestre89@gmail.com")
