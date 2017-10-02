@@ -1,5 +1,7 @@
-import requests
 import json
+
+import requests
+
 
 # TODO add logging service
 # TODO rename Meeting to Record
@@ -19,23 +21,12 @@ class ClientAPI:
         data = {"email": user_email, "name": user_name}
         return requests.post(self.meetings_url, data=json.dumps(data), headers=self.json_header)
 
-
-    def dump(self, message):
-        for field in message:
-            print(field.decode('utf-8'))
-
-
-    def copyf(self, data, key, allowed):
-        return list(filter(lambda f: f[key] in allowed, data))
-
-
     def get_all_users(self):
         return requests.get(self.users_url).json()
 
-
     def delete_user(self, user_email):
         user_list = self.get_all_users()
-        user_to_delete = self.copyf(user_list, 'email', (user_email,))
+        user_to_delete = self.search(user_list, 'email', (user_email,))
         if not user_to_delete:
             print("DELETE USER: User {} does not exist\n".format(user_email))
             return 404
@@ -43,23 +34,23 @@ class ClientAPI:
         response = requests.delete(self.users_url + "/" + id_to_delete, headers=self.json_header)
         return response.status_code
 
-
     def create_meeting(self, owner_id, recording_url, privacy):
         data = {"owner_id": owner_id, "recording": recording_url, "privacy": privacy}
         return requests.post(self.meetings_url, data=json.dumps(data), headers=self.json_header)
 
-
     def delete_meeting(self, meeting_id):
         return 0
-
 
     def share_meeting(self, meeting_id, user_email):
         return 0
 
-
     def create_user(self, user_name, user_email):
         data = {"email": user_email, "name": user_name}
         return requests.post(self.users_url, data=json.dumps(data), headers=self.json_header)
+
+    @staticmethod
+    def search(self, json_data, key, value):
+        return list(filter(lambda f: f[key] in value, json_data))
 
 
 if __name__ == '__main__':
