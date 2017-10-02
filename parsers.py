@@ -12,15 +12,15 @@ user_parser = reqparse.RequestParser()
 user_parser.add_argument('name', type=str)
 user_parser.add_argument('email', type=str)
 
-meeting_fields = {
+recording_fields = {
     'id': fields.Integer,
     'owner_id': fields.String,
     'recording': fields.String,
     'privacy': fields.String,
-    'uri': fields.Url('meeting', absolute=True)
+    'uri': fields.Url('recording', absolute=True)
 }
 
-meeting_parser = reqparse.RequestParser()
-meeting_parser.add_argument('owner_id', type=str)
-meeting_parser.add_argument('recording', type=str)
-meeting_parser.add_argument('privacy', type=str)
+recording_parser = reqparse.RequestParser()
+recording_parser.add_argument('owner_id', type=str)
+recording_parser.add_argument('recording', type=str)
+recording_parser.add_argument('privacy', type=str)

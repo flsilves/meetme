@@ -1,9 +1,8 @@
 import json
 import requests
 
-
 # TODO add logging service
-# TODO rename Meeting to Record
+# TODO rename recording to Record
 # TODO change recording attribute to storage_url
 # TODO unit test
 # TODO apply OOP
@@ -13,13 +12,13 @@ import requests
 class ClientAPI:
     def __init__(self, host_address):
         self.host_address = host_address
-        self.meetings_url = self.host_address + "/meetings"
+        self.recordings_url = self.host_address + "/recordings"
         self.users_url = self.host_address + "/users"
         self.json_header = {'Content-type': 'application/json'}
 
     def create_user(self, user_name, user_email):
         data = {"email": user_email, "name": user_name}
-        return requests.post(self.meetings_url, data=json.dumps(data), headers=self.json_header)
+        return requests.post(self.recordings_url, data=json.dumps(data), headers=self.json_header)
 
     def get_user_id(self, user_email):
         return 1
@@ -37,14 +36,14 @@ class ClientAPI:
         response = requests.delete(self.users_url + "/" + id_to_delete, headers=self.json_header)
         return response.status_code
 
-    def create_meeting(self, owner_id, recording_url, privacy):
+    def create_recording(self, owner_id, recording_url, privacy):
         data = {"owner_id": owner_id, "recording": recording_url, "privacy": privacy}
-        return requests.post(self.meetings_url, data=json.dumps(data), headers=self.json_header)
+        return requests.post(self.recordings_url, data=json.dumps(data), headers=self.json_header)
 
-    def delete_meeting(self, meeting_id):
+    def delete_recording(self, recording_id):
         return 0
 
-    def share_meeting(self, meeting_id, user_email):
+    def share_recording(self, recording_id, user_email):
         return 0
 
     def create_user(self, user_name, user_email):
@@ -63,6 +62,6 @@ if __name__ == '__main__':
     client.create_user("Ines Silva", "ines_silva@gmail.com")
 
     #client.delete_user("ines_silva@gmail.com")
-    print(client.get_all_users())
-    client.create_meeting("1", "https://s3.amazonaws.com/meeting/393217", "Private")
+    # print(client.get_all_users())
+    client.create_recording("1", "https://s3.amazonaws.com/recording/393217", "Private")
     client.delete_user(user_email="flaviosilvestre89@gmail.com")

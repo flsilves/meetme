@@ -1,5 +1,5 @@
 from parsers import *
-from models import User, Meeting, Permission
+from models import User, recording, Permission
 from db import session
 
 from flask_restful import abort
@@ -44,38 +44,38 @@ class UserListResource(Resource):
         return new_user, 201
 
 
-class MeetingResource(Resource):
-    @marshal_with(meeting_fields)
+class recordingResource(Resource):
+    @marshal_with(recording_fields)
     def get(self, id):
-        queried_meeting = session.query(Meeting).filter(Meeting.id == id).first()
-        if not queried_meeting:
-            abort(404, message="Meeting {} doesn't exist".format(id))
-        return queried_meeting
+        queried_recording = session.query(recording).filter(recording.id == id).first()
+        if not queried_recording:
+            abort(404, message="recording {} doesn't exist".format(id))
+        return queried_recording
 
     def delete(self, id):
-        queried_meeting = session.query(Meeting).filter(Meeting.id == id).first()
-        if not queried_meeting:
-            abort(404, message="Meeting {} doesn't exist".format(id))
-        session.delete(queried_meeting)
+        queried_recording = session.query(recording).filter(recording.id == id).first()
+        if not queried_recording:
+            abort(404, message="recording {} doesn't exist".format(id))
+        session.delete(queried_recording)
         session.commit()
         return {}, 204
 
 
-class MeetingListResource(Resource):
-    @marshal_with(meeting_fields)
+class recordingListResource(Resource):
+    @marshal_with(recording_fields)
     def get(self):
-        queried_meeting = session.query(Meeting).all()
-        return queried_meeting
+        queried_recording = session.query(recording).all()
+        return queried_recording
 
-    @marshal_with(meeting_fields)
+    @marshal_with(recording_fields)
     def post(self):
-        parsed_args = meeting_parser.parse_args()
-        new_meeting = Meeting(owner_id=parsed_args['owner_id'], recording=parsed_args['recording'], privacy=parsed_args['privacy'])
-        session.add(new_meeting)
+        parsed_args = recording_parser.parse_args()
+        new_recording = recording(owner_id=parsed_args['owner_id'], recording=parsed_args['recording'], privacy=parsed_args['privacy'])
+        session.add(new_recording)
         session.flush()
-        print(new_meeting.id)
-        new_permission = Permission(user_id=new_meeting.owner_id, meeting_id=new_meeting.id)
+        print(new_recording.id)
+        new_permission = Permission(user_id=new_recording.owner_id, recording_id=new_recording.id)
         session.add(new_permission)
         session.commit()
 
-        return new_meeting, 201
+        return new_recording, 201

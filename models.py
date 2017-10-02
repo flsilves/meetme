@@ -15,11 +15,11 @@ Base = declarative_base()
 class Permission(Base):
     __tablename__ = 'permissions'
     user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-    meeting_id = Column(Integer, ForeignKey('meetings.id'), primary_key=True)
+    recording_id = Column(Integer, ForeignKey('recordings.id'), primary_key=True)
 
 
-class Meeting(Base):
-    __tablename__ = 'meetings'
+class recording(Base):
+    __tablename__ = 'recordings'
     id = Column(Integer, primary_key=True)
     owner_id = Column(Integer, ForeignKey('users.id'))
     recording = Column(String(255), unique=True)
@@ -33,7 +33,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     email = Column(String(255), unique=True)
-    association = relationship("Meeting", secondary='permissions', backref='users', cascade="save-update, merge, delete")
+    association = relationship("recording", secondary='permissions', backref='users', cascade="save-update, merge, delete")
 
 
 if __name__ == "__main__":
