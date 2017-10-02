@@ -37,7 +37,7 @@ class ClientAPI:
         return response.status_code
 
     def create_recording(self, owner_id, storage_url, privacy):
-        data = {"owner_id": owner_id, "storage_url": storage_url, "privacy": privacy}
+        data = dict(owner_id=owner_id, storage_url=storage_url, privacy=privacy)
         return requests.post(self.recordings_url, data=json.dumps(data), headers=self.json_header)
 
     def delete_recording(self, recording_id):
