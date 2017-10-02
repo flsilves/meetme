@@ -1,5 +1,4 @@
 import json
-
 import requests
 
 
@@ -9,6 +8,7 @@ import requests
 # TODO unit test
 # TODO apply OOP
 # TODO Pretty methods
+#TODO delete user, cascade -> delete all meetings that he owns + permissions
 
 class ClientAPI:
     def __init__(self, host_address):
@@ -49,16 +49,17 @@ class ClientAPI:
         return requests.post(self.users_url, data=json.dumps(data), headers=self.json_header)
 
     @staticmethod
-    def search(self, json_data, key, value):
+    def search(json_data, key, value):
         return list(filter(lambda f: f[key] in value, json_data))
 
 
 if __name__ == '__main__':
     client = ClientAPI(host_address="http://127.0.0.1:5000")
+    print(client.get_all_users())
     client.create_user("Flavio", "flaviosilvestre89@gmail.com")
     client.create_user("Ines Silva", "ines_silva@gmail.com")
-    print(client.get_all_users())
-    # delete_user("ines_silva@gmail.com")
-    # print(get_all_users())
+
+    #client.delete_user("ines_silva@gmail.com")
+    # print(client.get_all_users())
     client.create_meeting("1", "https://s3.amazonaws.com/meeting/393217", "Private")
-    delete_user("flaviosilvestre89@gmail.com")
+    client.delete_user(user_email="flaviosilvestre89@gmail.com")

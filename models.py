@@ -32,7 +32,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     email = Column(String(255), unique=True)
-    association = relationship("User", secondary='permissions', backref='meetings')
+    association = relationship("User", secondary='permissions', backref='meetings', cascade="save-update, merge, delete")
 
 
 if __name__ == "__main__":
