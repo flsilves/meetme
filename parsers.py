@@ -1,5 +1,4 @@
-from flask_restful import fields
-from flask_restful import reqparse
+from flask_restful import fields, reqparse
 
 user_fields = {
     'id': fields.Integer,
@@ -33,4 +32,3 @@ permission_fields = {
 permission_parser = reqparse.RequestParser()
 permission_parser.add_argument('user_id', type=str)
 permission_parser.add_argument('recording_id', type=str)
-

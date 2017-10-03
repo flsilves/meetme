@@ -42,9 +42,9 @@ class ClientAPI:
         return requests.delete(url, headers=self.json_header)
 
     def share_recording(self, user_id, recording_id):
-        url = self.users_url + '/' + user_id + '/permissions'
+        url = self.users_url + '/' + user_id + '/permissions/' + recording_id
         data = dict(user_id=user_id, recording_id=recording_id)
-        return requests.post(url,  data=json.dumps(data), headers=self.json_header)
+        return requests.put(url,  data=json.dumps(data), headers=self.json_header)
 
     def unshare_recording(self, user_id, recording_id):
         url = self.users_url + '/' + user_id + '/permissions/' + recording_id
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
     client.create_recording('1', 'https://s3.amazonaws.com/recording/393217', 'password')
     client.share_recording('2', '1')
-
+    #client.delete_recording('1')
 
     # client.delete_recording('1')
     # client.delete_user(user_email="flaviosilvestre89@gmail.com")
