@@ -23,14 +23,8 @@ class ClientAPI:
         data = {'email': user_email, 'name': user_name}
         return requests.post(self.users_url, data=json.dumps(data), headers=self.json_header)
 
-    def delete_user(self, user_email):
-        user_list = self.get_all_users()
-        user_to_delete = self.search(user_list, 'email', (user_email,))
-        if not user_to_delete:
-            print('DELETE USER: User {} does not exist\n'.format(user_email))
-            return 404
-        id_to_delete = str(user_to_delete[0]['id'])
-        response = requests.delete(self.users_url + '/' + id_to_delete, headers=self.json_header)
+    def delete_user(self, user_id ):
+        response = requests.delete(self.users_url + '/' + user_id, headers=self.json_header)
         return response.status_code
 
     def create_recording(self, owner_id, storage_url, password):
@@ -66,4 +60,4 @@ if __name__ == '__main__':
     #client.delete_recording('1')
 
     # client.delete_recording('1')
-    # client.delete_user(user_email="flaviosilvestre89@gmail.com")
+    #client.delete_user('1')
