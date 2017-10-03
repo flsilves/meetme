@@ -73,11 +73,20 @@ class RecordingListResource(Resource):
         parsed_args = recording_parser.parse_args()
         new_recording = Recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'],
                                   privacy=parsed_args['privacy'])
+        new_recording2 = Recording(owner_id=parsed_args['owner_id'], storage_url='cenas',
+                                  privacy=parsed_args['privacy'])
         session.add(new_recording)
+
+        session.flush()
+        session.add(new_recording2)
         session.flush()
         print(new_recording.id)
         new_permission = Permission(user_id=new_recording.owner_id, recording_id=new_recording.id)
+        new_permission3 = Permission(user_id=new_recording.owner_id, recording_id=new_recording2.id)
+        new_permission2 = Permission(user_id=2, recording_id=new_recording.id)
         session.add(new_permission)
+        session.add(new_permission2)
+        session.add(new_permission3)
         session.commit()
 
         return new_recording, 201
@@ -86,8 +95,8 @@ class RecordingListResource(Resource):
 class PermissionResource(Resource):
     @marshal_with(permission_fields) ## falta o marshal
     def get(self, user_id, id):
-        queried_permission = session.query(Permission).filter(Permission.user_id == user_id).first()
-        #print(queried_permission)
+        queried_permission = session.query(Permission).filter(Permission.user_id == user_id).all()
+        print(repr(queried_permission))
         if not queried_permission:
             abort(404, message="recording {} doesn't exist".format(id))
         return queried_permission
