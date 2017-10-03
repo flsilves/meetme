@@ -6,7 +6,8 @@ from db import session
 from models import User, Recording, Permission
 from parsers import *
 
-
+# TODO http://127.0.0.1:5000/users/1/permissions/3 -> should return false or true
+# TODO http://127.0.0.1:5000/users/1/permissions -> list with object permissions
 class UserResource(Resource):
     @marshal_with(user_fields)
     def get(self, id):
