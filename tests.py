@@ -16,8 +16,8 @@ class BasicTestCase(unittest.TestCase):
         def test_create_user(self):
             response = self.client.get('http://localhost:5000/users')
             payload = (response.data).decode('utf-8')
-            print("Status Code = {}".format(response.status_code))
-            self.assertEqual(payload, "[]\n")
+            print('Status Code = {}'.format(response.status_code))
+            self.assertEqual(payload, '[]\n')
             self.assertEqual(response.status_code, 200)
 
 

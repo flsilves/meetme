@@ -56,7 +56,9 @@ if __name__ == '__main__':
     client.create_user('Ines Silva', 'ines_silva@gmail.com')
 
     client.create_recording('1', 'https://s3.amazonaws.com/recording/393217', 'password')
+    client.create_recording('1', 'https://s3.amazonaws.com/recording/393217', 'password')
     client.share_recording('2', '1')
+    client.unshare_recording('2', '1')
     #client.delete_recording('1')
 
     # client.delete_recording('1')
