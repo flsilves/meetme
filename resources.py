@@ -84,11 +84,10 @@ class RecordingListResource(Resource):
 
 
 class PermissionResource(Resource):
-    @marshal_with(recording_fields) ## falta o marshal
+    @marshal_with(permission_fields) ## falta o marshal
     def get(self, user_id, id):
-
         queried_permission = session.query(Permission).filter(Permission.user_id == user_id).first()
-        print(queried_permission)
+        #print(queried_permission)
         if not queried_permission:
             abort(404, message="recording {} doesn't exist".format(id))
         return queried_permission
