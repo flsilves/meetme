@@ -18,7 +18,7 @@ class Permission(Base):
     recording_id = Column(Integer, ForeignKey('recordings.id'), primary_key=True)
 
 
-class recording(Base):
+class Recording(Base):
     __tablename__ = 'recordings'
     id = Column(Integer, primary_key=True)
     owner_id = Column(Integer, ForeignKey('users.id'))
@@ -33,7 +33,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     email = Column(String(255), unique=True)
-    association = relationship("recording", secondary='permissions', backref='users', cascade="save-update, merge, delete")
+    association = relationship("Recording", secondary='permissions', backref='users', cascade="save-update, merge, delete")
 
 
 if __name__ == "__main__":

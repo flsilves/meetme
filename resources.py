@@ -1,5 +1,5 @@
 from parsers import *
-from models import User, recording, Permission
+from models import User, Recording, Permission
 from db import session
 
 from flask_restful import abort
@@ -47,13 +47,13 @@ class UserListResource(Resource):
 class RecordingResource(Resource):
     @marshal_with(recording_fields)
     def get(self, id):
-        queried_recording = session.query(recording).filter(recording.id == id).first()
+        queried_recording = session.query(Recording).filter(Recording.id == id).first()
         if not queried_recording:
             abort(404, message="recording {} doesn't exist".format(id))
         return queried_recording
 
     def delete(self, id):
-        queried_recording = session.query(recording).filter(recording.id == id).first()
+        queried_recording = session.query(Recording).filter(Recording.id == id).first()
         if not queried_recording:
             abort(404, message="recording {} doesn't exist".format(id))
         session.delete(queried_recording)
@@ -64,13 +64,13 @@ class RecordingResource(Resource):
 class RecordingListResource(Resource):
     @marshal_with(recording_fields)
     def get(self):
-        queried_recording = session.query(recording).all()
+        queried_recording = session.query(Recording).all()
         return queried_recording
 
     @marshal_with(recording_fields)
     def post(self):
         parsed_args = recording_parser.parse_args()
-        new_recording = recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'], privacy=parsed_args['privacy'])
+        new_recording = Recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'], privacy=parsed_args['privacy'])
         session.add(new_recording)
         session.flush()
         print(new_recording.id)
@@ -79,3 +79,38 @@ class RecordingListResource(Resource):
         session.commit()
 
         return new_recording, 201
+
+# class MembershipResource(Resource):
+#     def get(self, id):
+#         queried_recording = session.query(Recording).filter(Recording.id == id).first()
+#         if not queried_recording:
+#             abort(404, message="recording {} doesn't exist".format(id))
+#         return queried_recording
+#
+#     def delete(self, id):
+#         queried_recording = session.query(Recording).filter(Recording.id == id).first()
+#         if not queried_recording:
+#             abort(404, message="recording {} doesn't exist".format(id))
+#         session.delete(queried_recording)
+#         session.commit()
+#         return {}, 204
+#
+# class MembershipListResource(Resource):
+#     @marshal_with(membership_fields)
+#     def get(self):
+#         queried_recording = session.query(Recording).all()
+#         return queried_recording
+#
+#     @marshal_with(recording_fields)
+#     def post(self):
+#         parsed_args = recording_parser.parse_args()
+#         new_recording = Recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'],
+#                                   privacy=parsed_args['privacy'])
+#         session.add(new_recording)
+#         session.flush()
+#         print(new_recording.id)
+#         new_permission = Permission(user_id=new_recording.owner_id, recording_id=new_recording.id)
+#         session.add(new_permission)
+#         session.commit()
+#
+#         return new_recording, 201
