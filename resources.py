@@ -72,55 +72,50 @@ class RecordingListResource(Resource):
     @marshal_with(recording_fields)
     def post(self):
         parsed_args = recording_parser.parse_args()
-        new_recording = Recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'],
-                                  privacy=parsed_args['privacy'])
-        new_recording2 = Recording(owner_id=parsed_args['owner_id'], storage_url='cenas',
-                                  privacy=parsed_args['privacy'])
+        new_recording = Recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'], privacy=parsed_args['privacy'])
         session.add(new_recording)
-
         session.flush()
-        session.add(new_recording2)
-        session.flush()
-        print(new_recording.id)
         new_permission = Permission(user_id=new_recording.owner_id, recording_id=new_recording.id)
-        new_permission3 = Permission(user_id=new_recording.owner_id, recording_id=new_recording2.id)
-        new_permission2 = Permission(user_id=2, recording_id=new_recording.id)
         session.add(new_permission)
-        session.add(new_permission2)
-        session.add(new_permission3)
         session.commit()
-
         return new_recording, 201
 
 
 class PermissionResource(Resource):
-    @marshal_with(permission_fields) ## falta o marshal
-    def get(self, user_id, id):
-        queried_permission = session.query(Permission).filter(Permission.user_id == user_id).all()
-        print(repr(queried_permission))
+    @marshal_with(permission_fields)
+    def get(self, user_id, recording_id):
+        queried_permission = session.query(Permission).filter(Permission.user_id == user_id).filter(Permission.recording_id == recording_id).first()
         if not queried_permission:
-            abort(404, message="recording {} doesn't exist".format(id))
+            abort(404, message="No permission".format(user_id, recording_id))
         return queried_permission
 
+    @marshal_with(permission_fields)
+    def delete(self, user_id, recording_id):
+        queried_user = session.query(User).filter(User.user_id == id).first()
+        if not queried_user:
+            abort(404, message="User {} doesn't exist".format(user_id))
+        delete_query = session.query(Permission).filter(Permission.user_id == user_id).filter(Permission.recording_id == recording_id).first()
+        session.delete(delete_query)
+        session.commit()
+        return {}, 204
 
 
+class PermissionListResource(Resource):
+    @marshal_with(permission_fields)
+    def get(self, user_id):
+        queried_permissions = session.query(Permission).filter(Permission.user_id == user_id).all()
+        return queried_permissions
 
-    # class MembershipListResource(Resource):
-#     @marshal_with(membership_fields)
-#     def get(self):
-#         queried_recording = session.query(Recording).all()
-#         return queried_recording
-#
-#     @marshal_with(recording_fields)
-#     def post(self):
-#         parsed_args = recording_parser.parse_args()
-#         new_recording = Recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'],
-#                                   privacy=parsed_args['privacy'])
-#         session.add(new_recording)
-#         session.flush()
-#         print(new_recording.id)
-#         new_permission = Permission(user_id=new_recording.owner_id, recording_id=new_recording.id)
-#         session.add(new_permission)
-#         session.commit()
-#
-#         return new_recording, 201
+    @marshal_with(permission_fields)
+    def post(self, user_id, recording_id):
+        queried_user = session.query(User).filter(User.id == user_id).first()
+        queried_recording = session.query(Recording).filter(Recording.id == recording_id).first()
+        if (not queried_user):
+            abort(404, message="User {} does not exist".format(user_id))
+        if (not queried_recording):
+            abort(404, message="Recording {} does not exist".format(user_id))
+        new_permission = Permission(user_id=user_id, recording_id=recording_id)
+        session.add(new_permission)
+        session.commit()
+        return new_permission, 201
+

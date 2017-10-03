@@ -1,14 +1,6 @@
 import json
 import requests
 
-# TODO add logging service
-# TODO rename recording to Record
-# TODO change recording attribute to storage_url
-# TODO unit test
-# TODO apply OOP
-# TODO Pretty methods
-
-
 class ClientAPI:
     def __init__(self, host_address):
         self.host_address = host_address

@@ -14,10 +14,11 @@ def create_app():
     api.add_resource(RecordingListResource, '/recordings', endpoint='recordings')
     api.add_resource(RecordingResource, '/recordings/<string:id>', endpoint='recording')
 
-    #api.add_resource(MembershipListResource, '/users/<string:id>/memberships/', endpoint='memberships')
-    api.add_resource(PermissionResource, '/users/<string:user_id>/permissions/<string:id>', endpoint='permission')
+    api.add_resource(PermissionResource, '/users/<string:user_id>/permissions/<string:recording_id>', endpoint='permission')
+    #api.add_resource(PermissionListResource, '/users/<string:user_id/permissions', endpoint='permissions')
+
     return app
-# api.add_resource(PermissionsListResource, '/users/<string:id>/permissions', endpoint='permissions')
+
 
 if __name__ == '__main__':
     create_app().run(debug=True)
