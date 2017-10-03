@@ -13,17 +13,17 @@ class ClientAPI:
         data = {'email': user_email, 'name': user_name}
         return requests.post(self.recordings_url, data=json.dumps(data), headers=self.json_header)
 
-    def get_user_id(self, user_email):
-        return 1
-
     def get_all_users(self):
         return requests.get(self.users_url).json()
+
+    def get_all_recordings(self):
+        return requests.get(self.recordings_url).json()
 
     def create_user(self, user_name, user_email):
         data = {'email': user_email, 'name': user_name}
         return requests.post(self.users_url, data=json.dumps(data), headers=self.json_header)
 
-    def delete_user(self, user_id ):
+    def delete_user(self, user_id):
         response = requests.delete(self.users_url + '/' + user_id, headers=self.json_header)
         return response.status_code
 
@@ -38,28 +38,24 @@ class ClientAPI:
     def share_recording(self, user_id, recording_id):
         url = self.users_url + '/' + user_id + '/permissions/' + recording_id
         data = dict(user_id=user_id, recording_id=recording_id)
-        return requests.put(url,  data=json.dumps(data), headers=self.json_header)
+        return requests.put(url, data=json.dumps(data), headers=self.json_header)
 
     def unshare_recording(self, user_id, recording_id):
         url = self.users_url + '/' + user_id + '/permissions/' + recording_id
         return requests.delete(url, headers=self.json_header)
 
-    @staticmethod
-    def search(json_data, key, value):
-        return list(filter(lambda f: f[key] in value, json_data))
-
 
 if __name__ == '__main__':
     client = ClientAPI(host_address='http://127.0.0.1:5000')
-    print(client.get_all_users())
-    client.create_user('Flavio', 'flaviosilvestre89@gmail.com')
-    client.create_user('Ines Silva', 'ines_silva@gmail.com')
 
-    client.create_recording('1', 'https://s3.amazonaws.com/recording/393217', 'password')
-    client.create_recording('1', 'https://s3.amazonaws.com/recording/393217', 'password')
+    client.create_user('Flavio', 'flaviosilvestre89@gmail.com')  ## Usage example
+    client.create_user('User Foo', 'user@gmail.com')
+    client.create_recording(owner_id='1', storage_url='https://s3.amazonaws.com/recording/393217',
+                            password='secrethash')
     client.share_recording('2', '1')
     client.unshare_recording('2', '1')
-    #client.delete_recording('1')
-
-    # client.delete_recording('1')
-    #client.delete_user('1')
+    client.delete_recording('1')
+    client.delete_user('1')
+    client.create_recording(owner_id='2', storage_url='https://s3.amazonaws.com/recording/123', password='secrethash2')
+    print(client.get_all_users())
+    print(client.get_all_recordings())

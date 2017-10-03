@@ -23,13 +23,13 @@ class Recording(Base):
     password = Column(String(255))
 
 
-
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     email = Column(String(255), unique=True)
-    association = relationship('Recording', secondary='permissions', backref='users', cascade='save-update, merge, delete')
+    association = relationship('Recording', secondary='permissions', backref='users',
+                               cascade='save-update, merge, delete')
 
 
 if __name__ == '__main__':

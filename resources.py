@@ -66,7 +66,8 @@ class RecordingListResource(Resource):
     @marshal_with(recording_fields)
     def post(self):
         parsed_args = recording_parser.parse_args()
-        duplicated_recording = session.query(Recording).filter(Recording.storage_url == parsed_args['storage_url']).first()
+        duplicated_recording = session.query(Recording).filter(
+            Recording.storage_url == parsed_args['storage_url']).first()
         if duplicated_recording:
             abort(404, message='A recording with the same url already exists')
         new_recording = Recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'],
