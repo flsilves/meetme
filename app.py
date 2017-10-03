@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from resources import UserListResource, RecordingListResource
-from resources import UserResource, RecordingResource
+from resources import UserResource, RecordingResource, PermissionResource
 
 
 def create_app():
@@ -13,6 +13,9 @@ def create_app():
 
     api.add_resource(RecordingListResource, '/recordings', endpoint='recordings')
     api.add_resource(RecordingResource, '/recordings/<string:id>', endpoint='recording')
+
+    #api.add_resource(MembershipListResource, '/users/<string:id>/memberships/', endpoint='memberships')
+    api.add_resource(PermissionResource, '/users/<string:user_id>/permissions/<string:id>', endpoint='permission')
     return app
 # api.add_resource(PermissionsListResource, '/users/<string:id>/permissions', endpoint='permissions')
 

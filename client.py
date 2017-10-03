@@ -63,4 +63,4 @@ if __name__ == '__main__':
     #client.delete_user("ines_silva@gmail.com")
     print(client.get_all_users())
     client.create_recording("1", "https://s3.amazonaws.com/recording/393217", "Private")
-    client.delete_user(user_email="flaviosilvestre89@gmail.com")
+    #client.delete_user(user_email="flaviosilvestre89@gmail.com")

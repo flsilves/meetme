@@ -1,19 +1,20 @@
-from parsers import *
-from models import User, Recording, Permission
-from db import session
-
-from flask_restful import abort
 from flask_restful import Resource
+from flask_restful import abort
 from flask_restful import marshal_with
+
+from db import session
+from models import User, Recording, Permission
+from parsers import *
 
 
 class UserResource(Resource):
     @marshal_with(user_fields)
     def get(self, id):
         queried_user = session.query(User).filter(User.id == id).first()
+        permission = session.query(User) # join get list of permissions
         if not queried_user:
             abort(404, message="User {} doesn't exist".format(id))
-        return queried_user
+        return [queried_user, queried_user]
 
     def delete(self, id):
         queried_user = session.query(User).filter(User.id == id).first()
@@ -70,7 +71,8 @@ class RecordingListResource(Resource):
     @marshal_with(recording_fields)
     def post(self):
         parsed_args = recording_parser.parse_args()
-        new_recording = Recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'], privacy=parsed_args['privacy'])
+        new_recording = Recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'],
+                                  privacy=parsed_args['privacy'])
         session.add(new_recording)
         session.flush()
         print(new_recording.id)
@@ -80,22 +82,21 @@ class RecordingListResource(Resource):
 
         return new_recording, 201
 
-# class MembershipResource(Resource):
-#     def get(self, id):
-#         queried_recording = session.query(Recording).filter(Recording.id == id).first()
-#         if not queried_recording:
-#             abort(404, message="recording {} doesn't exist".format(id))
-#         return queried_recording
-#
-#     def delete(self, id):
-#         queried_recording = session.query(Recording).filter(Recording.id == id).first()
-#         if not queried_recording:
-#             abort(404, message="recording {} doesn't exist".format(id))
-#         session.delete(queried_recording)
-#         session.commit()
-#         return {}, 204
-#
-# class MembershipListResource(Resource):
+
+class PermissionResource(Resource):
+    @marshal_with(recording_fields) ## falta o marshal
+    def get(self, user_id, id):
+
+        queried_permission = session.query(Permission).filter(Permission.user_id == user_id).first()
+        print(queried_permission)
+        if not queried_permission:
+            abort(404, message="recording {} doesn't exist".format(id))
+        return queried_permission
+
+
+
+
+    # class MembershipListResource(Resource):
 #     @marshal_with(membership_fields)
 #     def get(self):
 #         queried_recording = session.query(Recording).all()
