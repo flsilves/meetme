@@ -23,7 +23,6 @@ class Recording(Base):
     id = Column(Integer, primary_key=True)
     owner_id = Column(Integer, ForeignKey('users.id'))
     storage_url = Column(String(255), unique=True)
-    privacy = Column(String(255))
     password = Column(String(255))
 
 

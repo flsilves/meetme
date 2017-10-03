@@ -23,7 +23,7 @@ recording_fields = {
 recording_parser = reqparse.RequestParser()
 recording_parser.add_argument('owner_id', type=str)
 recording_parser.add_argument('storage_url', type=str)
-recording_parser.add_argument('privacy', type=str)
+recording_parser.add_argument('password', type=str)
 
 permission_fields = {
     'user_id': fields.Integer,

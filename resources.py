@@ -72,7 +72,7 @@ class RecordingListResource(Resource):
     @marshal_with(recording_fields)
     def post(self):
         parsed_args = recording_parser.parse_args()
-        new_recording = Recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'], privacy=parsed_args['privacy'])
+        new_recording = Recording(owner_id=parsed_args['owner_id'], storage_url=parsed_args['storage_url'], password=parsed_args['password'])
         session.add(new_recording)
         session.flush()
         new_permission = Permission(user_id=new_recording.owner_id, recording_id=new_recording.id)
@@ -83,14 +83,14 @@ class RecordingListResource(Resource):
 
 class PermissionResource(Resource):
     @marshal_with(permission_fields)
-    def get(self, user_id, recording_id):
+    def get(self, user_id, recording_id): #V
         queried_permission = session.query(Permission).filter(Permission.user_id == user_id).filter(Permission.recording_id == recording_id).first()
         if not queried_permission:
             abort(404, message="No permission".format(user_id, recording_id))
         return queried_permission
 
     @marshal_with(permission_fields)
-    def delete(self, user_id, recording_id):
+    def delete(self, user_id, recording_id): #X
         queried_user = session.query(User).filter(User.user_id == id).first()
         if not queried_user:
             abort(404, message="User {} doesn't exist".format(user_id))
@@ -101,13 +101,13 @@ class PermissionResource(Resource):
 
 
 class PermissionListResource(Resource):
-    @marshal_with(permission_fields)
+    @marshal_with(permission_fields) #V
     def get(self, user_id):
         queried_permissions = session.query(Permission).filter(Permission.user_id == user_id).all()
         return queried_permissions
 
     @marshal_with(permission_fields)
-    def post(self, user_id, recording_id):
+    def post(self, user_id, recording_id): #X
         queried_user = session.query(User).filter(User.id == user_id).first()
         queried_recording = session.query(Recording).filter(Recording.id == recording_id).first()
         if (not queried_user):
