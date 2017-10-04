@@ -18,18 +18,18 @@ class BasicTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_create_user(self):
-        data = {'name': 'Flavio', 'email': 'flaviosilvestre89@gmail.com'}
+    def test_create_user(self, name='User1', email='dummy@email.com'):
+        data = {'name': name, 'email': email}
         response = self.client.post(users_url, data=json.dumps(data), headers=json_header)
         response = json.loads((response.data).decode('utf-8'))
-        self.assertEqual(response['name'],'Flavio')
-        self.assertEqual(response['email'],'flaviosilvestre89@gmail.com')
+        self.assertEqual(response['name'],name)
+        self.assertEqual(response['email'],email)
+
 
     def test_get_users(self):
+        self.test_create_user('Flavio','flaviosilvestre89@gmail.com')
         response = self.client.get(users_url)
-        #payload = (response.data).decode('utf-8')
-        #print('Status Code = {}'.format(response.status_code))
-        #self.assertEqual(payload, '[]\n')
+        print(json.loads((response.data).decode('utf-8')))
         self.assertEqual(response.status_code, 200)
 
 
