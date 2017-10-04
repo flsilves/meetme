@@ -1,11 +1,19 @@
-# Project Name
-Build Status: [![Build Status](https://travis-ci.org/flsilves/meetme.svg?branch=master)](https://travis-ci.org/flsilves/meetme)
+# meetme
+[![Build Status](https://travis-ci.org/flsilves/meetme.svg?branch=master)](https://travis-ci.org/flsilves/meetme)
 
-## *Installing Requirements*
+## Deployment steps
+### 1. Install Requirements
 ```shell
 $ pip install -r requirements.txt
 ```
-
+### 2. Create Database model
+```shell
+$ python models.py
+```
+### 3. Run REST api *
+``` shell
+$ python app.py
+```
 
 ## URI Summary
 
@@ -20,15 +28,12 @@ The following table summarises all the available resource URIs, and the effect o
 | [/users/:user\_id/permissions](#permission)                                   | Gets all recordings that {user\_id} has access to                 | N/A                                   | N/A                                  | N/A                                         |
 | [/users/:user\_id/permissions/:recording\_id](#permission)                   | Queries if a particular {user\_id} has access to {recording\_id}  | N/A                                   | Creates a new permission for a user  | Remove permissions from user                |                                   |
 
-## Message Summary
-
+## Resources
 ### User
 ``` json
-{
-    'id': Integer,
-    'name': String,
-    'email': String,
-}
+"name"  : "user",
+"email" : "user@mail.com"
+  
 ```
 ### Recording
 
