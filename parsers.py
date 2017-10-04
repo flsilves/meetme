@@ -15,7 +15,7 @@ recording_fields = {
     'id': fields.Integer,
     'owner_id': fields.String,
     'storage_url': fields.String,
-    'privacy': fields.String,
+    'password': fields.String,
     'uri': fields.Url('recording', absolute=True)
 }
 
