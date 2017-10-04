@@ -1,6 +1,5 @@
-# meetme [![Build Status](https://travis-ci.org/flsilves/meetme.svg?branch=master)](https://travis-ci.org/flsilves/meetme) 
+# meetme (python 3.6) [![Build Status](https://travis-ci.org/flsilves/meetme.svg?branch=master)](https://travis-ci.org/flsilves/meetme) 
 Simple meeting management REST API
-
 
 ## *Deployment steps*
 ### 1. Install Requirements
@@ -50,7 +49,7 @@ password | string | Password required to access the recording
 Field | Data Type | Description
 --- | --- | ---
 user_id| integer | A user that isn't the owner of the recording
-recording_id | string | The recording identifier that has been granted accesses to
+recording_id | string | The recording identifier that has been granted access to
 
 ## Run Unit tests
 ```shell
