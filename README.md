@@ -34,7 +34,7 @@ Field | Data Type | Description
 --- | --- | ---
 id | integer | Unique identifier
 name | string | User name
-email | string | User email (must be unique)
+email | string | User email (unique)
 
 
 ### Recording
@@ -42,7 +42,7 @@ Field | Data Type | Description
 --- | --- | ---
 id | integer | Unique identifier
 owner_id | integer | Identifier of the user that owns the recording (host)
-storage_url | string | URL to the recording video
+storage_url | string | URL to the recording video (unique)
 password | string | Password required to access the recording
 
 ### Permissions
