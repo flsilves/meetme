@@ -1,4 +1,5 @@
 import unittest
+
 from flask import json
 
 import app
@@ -7,6 +8,7 @@ from models import *
 users_url = 'http://localhost:5000/users'
 recordings_url = 'http://localhost:5000/recordings'
 json_header = {'Content-type': 'application/json'}
+
 
 class BasicTestCase(unittest.TestCase):
     def setUp(self):
@@ -48,14 +50,14 @@ class BasicTestCase(unittest.TestCase):
     def share_recording(self, recording_id, user_id):
         uri = users_url + '/' + str(user_id) + '/permissions/' + str(recording_id)
         data = {'user_id': user_id, 'recording_id': recording_id}
-        response = self.client.put(uri,  data=json.dumps(data), headers=json_header)
+        response = self.client.put(uri, data=json.dumps(data), headers=json_header)
         code = response.status_code
         return code
 
     def unshare_recording(self, recording_id, user_id):
         uri = users_url + '/' + str(user_id) + '/permissions/' + str(recording_id)
         data = {'user_id': user_id, 'recording_id': recording_id}
-        response = self.client.delete(uri,  data=json.dumps(data), headers=json_header)
+        response = self.client.delete(uri, data=json.dumps(data), headers=json_header)
         code = response.status_code
         return code
 
@@ -66,22 +68,23 @@ class BasicTestCase(unittest.TestCase):
         self.assertEqual(data['email'], 'flaviosilvestre89@gmail.com')
 
     def test_create_same_email(self):
-        data, code= self.create_user(name='Flavio', email='flaviosilvestre89@gmail.com')
+        data, code = self.create_user(name='Flavio', email='flaviosilvestre89@gmail.com')
         self.assertEqual(code, 201)
-        data, code= self.create_user(name='Flavio', email='flaviosilvestre89@gmail.com')
+        data, code = self.create_user(name='Flavio', email='flaviosilvestre89@gmail.com')
         self.assertEqual(code, 404)
 
     def test_create_recording(self):
-        password='secret'
+        password = 'secret'
         url = 'https://s3.amazonaws.com/recording/393217'
         data, code = self.create_user(name='Flavio', email='flaviosilvestre89@gmail.com')
         flavio_id = data['id']
-        data, code = self.create_recording(owner_id=flavio_id,storage_url=url,password=password)
+        data, code = self.create_recording(owner_id=flavio_id, storage_url=url, password=password)
         self.assertEqual(code, 201)
         self.assertEqual(data['owner_id'], str(flavio_id))
         self.assertEqual(data['storage_url'], url)
         self.assertEqual(data['password'], password)
-        data, code = self.create_user(name='Flavio', email='flaviosilvestre89@gmail.com') ## try to create duplicated recording
+        data, code = self.create_user(name='Flavio',
+                                      email='flaviosilvestre89@gmail.com')  ## try to create duplicated recording
         self.assertEqual(code, 404)
 
     def test_delete_user(self):
@@ -94,9 +97,9 @@ class BasicTestCase(unittest.TestCase):
         self.assertEqual(code, 204)
 
     def test_delete_recording(self):
-         self.test_create_recording();
-         code = self.delete_recording('1')
-         self.assertEqual(code, 204)
+        self.test_create_recording();
+        code = self.delete_recording('1')
+        self.assertEqual(code, 204)
 
     def test_recording_share(self):
         data, code = self.create_user(name='Flavio', email='flaviosilvestre89@gmail.com')
@@ -105,16 +108,14 @@ class BasicTestCase(unittest.TestCase):
         data, code = self.create_user(name='FriendUser', email='sample@gmail.com')
         self.assertEqual(code, 201)
         user2_id = data['id']
-        data, code = self.create_recording(owner_id=user1_id,storage_url='https://s3.amazonaws.com/recording/393217', password='password')
+        data, code = self.create_recording(owner_id=user1_id, storage_url='https://s3.amazonaws.com/recording/393217',
+                                           password='password')
         self.assertEqual(code, 201)
         recording_id = data['id']
         code = self.share_recording(recording_id, user2_id)
         self.assertEqual(code, 201)
         code = self.unshare_recording(recording_id, user2_id)
         self.assertEqual(code, 204)
-
-
-
 
 
 if __name__ == '__main__':
