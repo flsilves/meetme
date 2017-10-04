@@ -1,7 +1,7 @@
 # meetme [![Build Status](https://travis-ci.org/flsilves/meetme.svg?branch=master)](https://travis-ci.org/flsilves/meetme) 
-Simple meeting management REST API *(python 3.6)*
+Simple meeting management REST API **(python 3.6)**
 
-## *Deployment steps*
+## **Deployment steps**
 ### 1. Install Requirements
 ```shell
 $ pip install -r requirements.txt
