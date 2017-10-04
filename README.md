@@ -25,8 +25,8 @@ The following table summarises all the available resource URIs, and the effect o
 | [/users/:user\_id](#user)                                                     | Returns the details of a single reader                            | N/A                                   | N/A                                  | Deletes user                                |
 | [/recordings/](#recording)                                                     | Returns the list of all recordings                                | Create a new recording(s)             | N/A                                  | N/A                                         |
 | [/recordings/:recording\_id](#recording)                                      | Returns the info of a single recording                            | N/A                                   | N/A                                  | Deletes recording                           |
-| [/users/:user\_id/permissions](#permissions)                                   | Gets all recordings that {user\_id} has access to                 | N/A                                   | N/A                                  | N/A                                         |
-| [/users/:user\_id/permissions/:recording\_id](#permissions)                   | Queries if a particular {user\_id} has access to {recording\_id}  | N/A                                   | Creates a new permission for a user  | Remove permissions from user                |                                   |
+| [/users/:user\_id/permissions](#permissions)                                   | Gets all recordings that **:user_id** has access to                 | N/A                                   | N/A                                  | N/A                                         |
+| [/users/:user\_id/permissions/:recording\_id](#permissions)                   | Queries if a particular **:user_id** has access to **:recording_id**  | N/A                                   | Creates permission for **:user_id** to access **:recording_id**   | Removes permission from the user                |                                   |
 
 ## Resources Properties
 ### User
@@ -48,7 +48,7 @@ password | string | Password required to access the recording
 ### Permissions
 Field | Data Type | Description
 --- | --- | ---
-user_id| integer | A user that isn't the owner of the recording
+user_id| integer | User unique identifier
 recording_id | string | The recording identifier that has been granted access to
 
 ## Run Unit tests
