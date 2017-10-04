@@ -1,8 +1,7 @@
 import app
 from models import *
 import unittest
-import json
-
+from flask import json, jsonify
 users_url = 'http://localhost:5000/users'
 recordings_url = 'http://localhost:5000/recordings'
 json_header = {'Content-type': 'application/json'}
@@ -18,19 +17,18 @@ class BasicTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_create_user(self, name='User1', email='dummy@email.com'):
+    def create_user(self, name='User1', email='dummy@email.com'):
         data = {'name': name, 'email': email}
-        response = self.client.post(users_url, data=json.dumps(data), headers=json_header)
-        response = json.loads((response.data).decode('utf-8'))
-        self.assertEqual(response['name'],name)
-        self.assertEqual(response['email'],email)
+        return self.client.post(users_url, data=json.dumps(data), headers=json_header)
 
 
-    def test_get_users(self):
-        self.test_create_user('Flavio','flaviosilvestre89@gmail.com')
-        response = self.client.get(users_url)
-        print(json.loads((response.data).decode('utf-8')))
-        self.assertEqual(response.status_code, 200)
+    def test_create_user(self):
+        response =  self.create_user(name='Flavio',email='flaviosilvestre89@gmail.com')
+        json_data = json.loads(response.data)
+        self.assertEqual(json_data['name'], 'Flavio')
+        self.assertEqual(json_data['email'], 'flaviosilvestre89@gmail.com')
+
+
 
 
 if __name__ == '__main__':
